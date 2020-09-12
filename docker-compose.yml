@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+  db:
+        image: postgres:latest
+        ports:
+          - 5432:5432
+        restart: always
+        environment:
+          POSTGRES_DATABASE: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 12345678
+          POSTGRES_ROOT_PASSWORD: postgres
+
+  springboot-add-nasabah:
+      build:
+        context: ../springboot-add-nasabah
+        dockerfile: ./Dockerfile
+      ports:
+      - 8085:8085
+
+  springboot-inquiry-pulsa:
+        build:
+          context: ../springboot-inquiry-pulsa
+          dockerfile: ./Dockerfile
+        ports:
+        - 8086:8086
+
+  springboot-cek-mutasi:
+        build:
+          context: ../springboot-cek-mutasi
+          dockerfile: ./Dockerfile
+        ports:
+        - 8087:8087
+
+  project-spring-boot-app-container:
+    image: project-spring-boot-app:1
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - /data/project-spring-boot-app
+    ports:
+      - 8080:8080
